@@ -51,6 +51,16 @@ async function encryptWithPublicKey(publicKey, text) {
   return btoa(String.fromCharCode(...new Uint8Array(encrypted))); // Base64 output
 }
 
+const pemKey = `-----BEGIN PUBLIC KEY-----
+...your key...
+-----END PUBLIC KEY-----`;
+
+const publicKey = await importPublicKey(pemKey);
+const encrypted = await encryptWithPublicKey(publicKey, "secret message");
+
+
+
+
 
 
 
