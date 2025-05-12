@@ -1,0 +1,45 @@
+npm install jsencrypt
+
+
+import JSEncrypt from 'jsencrypt';
+
+// This could come from env.js or be fetched dynamically
+const publicKey = ``;
+
+const encryptData = (plainText) => {
+  const encryptor = new JSEncrypt();
+  encryptor.setPublicKey(publicKey);
+  const encrypted = encryptor.encrypt(plainText);
+  return encrypted;
+};
+
+
+
+import java.io.InputStream;
+import java.security.*;
+import java.security.cert.Certificate;
+import javax.crypto.Cipher;
+
+public class RsaDecryptionUtil {
+
+    private static PrivateKey getPrivateKeyFromP12(String keystorePath, String password, String alias) throws Exception {
+        KeyStore keystore = KeyStore.getInstance("PKCS12");
+        try (InputStream is = RsaDecryptionUtil.class.getResourceAsStream(keystorePath)) {
+            keystore.load(is, password.toCharArray());
+        }
+        Key key = keystore.getKey(alias, password.toCharArray());
+        if (key instanceof PrivateKey) {
+            return (PrivateKey) key;
+        } else {
+            throw new RuntimeException("Not a private key");
+        }
+    }
+
+    public static String decrypt(String base64Encrypted, String keystorePath, String password, String alias) throws Exception {
+        PrivateKey privateKey = getPrivateKeyFromP12(keystorePath, password, alias);
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(base64Encrypted));
+        return new String(decryptedBytes);
+    }
+}
