@@ -60,6 +60,10 @@ const encrypted = await encryptWithPublicKey(publicKey, "secret message");
 
 
 
+const script = document.createElement('script');
+script.src = 'https://cdn.jsdelivr.net/npm/jsencrypt@3.0.0-rc.1/bin/jsencrypt.min.js';
+document.head.appendChild(script);
+
 
 
 
